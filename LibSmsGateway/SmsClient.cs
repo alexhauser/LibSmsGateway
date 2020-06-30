@@ -56,8 +56,8 @@ namespace LibSmsGateway
         /// <param name="flash">Set to <c>true</c> to send a "flash message", which will be
         /// displayed directly on the recipient's start screen and cannot be saved.</param>
         /// <returns></returns>
-        public async Task<SmsResult> Send(string message, string recipient, string group = "", 
-            string sender = "", bool receipt = false, bool flash = false)
+        public async Task<SmsResult> Send(string message, string recipient, string sender = "",
+            string group = "", bool receipt = false, bool flash = false)
         {
             if (message == null)
                 throw new ArgumentException("Invalid message!", nameof(message));
