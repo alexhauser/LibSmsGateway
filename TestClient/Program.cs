@@ -29,15 +29,19 @@ namespace TestClient
                 ).Result;
 
             // Evaluate result
-            Console.WriteLine(
-                "SatusCode: {0}\r\n" + 
-                "Satus Message: {1}\r\n" +
-                "IsSuccess: {2}\r\n" +
-                "Raw Result:\r\n{3}",
-                result.StatusCode.ToString(), 
-                result.StatusMessage, 
-                result.IsSuccess, 
+            if (result.IsSuccess)
+            {
+                // SMS sucesssfully delivered
+            }
+            else
+            {
+                // There was an error, find out what happened
+                Console.WriteLine(
+                "SatusCode: {0}, StatusMessage: \"{1}\", RawResult:\r\n{2}\r\n",
+                result.StatusCode.ToString(),
+                result.StatusMessage,
                 result.RawResponse);
+            }
         }
     }
 }
