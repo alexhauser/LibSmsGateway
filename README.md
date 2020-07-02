@@ -38,15 +38,19 @@ var result = await smsClient.Send(
 // Evaluate result
 if (result.IsSuccess)
 {
-	// SMS sucesssfully delivered
+    // SMS sucesssfully delivered
 }
 else
 {
-	// There was an error, find out what happened
-	Console.WriteLine(
-	"SatusCode: {0}, StatusMessage: \"{1}\", RawResult:\r\n{2}\r\n",
-	result.StatusCode.ToString(),
-	result.StatusMessage,
-	result.RawResponse);
+    // There was an error, find out what happened
+    Console.WriteLine(
+    "SatusCode: {0}, StatusMessage: \"{1}\", RawResult:\r\n{2}\r\n",
+    result.StatusCode.ToString(),
+    result.StatusMessage,
+    result.RawResponse);
 }
 ```
+## License
+
+This project is published under the MIT license.
+See https://raw.githubusercontent.com/alexhauser/LibSmsGateway/master/LICENSE for more information.
