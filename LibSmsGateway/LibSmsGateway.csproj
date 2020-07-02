@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Alexander Hauser</Authors>
+    <Description>A .NET Core library for sending SMS messages via the www.sms-gateway.at HTTP2SMS API.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
+    <PackageTags>LibSMSGateway;SMSLib;LibSMS;SMS library;texting;text;text message;messaging;sms-gateway;sms-gateway.at; sms gateway;send sms;send text</PackageTags>
   </PropertyGroup>
 
 </Project>
