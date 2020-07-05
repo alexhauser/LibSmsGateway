@@ -55,7 +55,8 @@ namespace LibSmsGateway
         /// This will cause additional charges.</param>
         /// <param name="flash">Set to <c>true</c> to send a "flash message", which will be
         /// displayed directly on the recipient's start screen and cannot be saved.</param>
-        /// <returns></returns>
+        /// <returns>Returns an <see cref="SmsResult"/> object representing the result of the 
+        /// SMS send operation.</returns>
         public async Task<SmsResult> Send(string message, string recipient, string sender = "",
             string group = "", bool receipt = false, bool flash = false)
         {
