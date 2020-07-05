@@ -39,7 +39,7 @@ namespace LibSmsGateway
         }
 
         /// <summary>
-        /// Sends an SMS message.
+        /// Sends an SMS message to a single recipient or recipient group.
         /// </summary>
         /// <param name="message">The message to be sent. Up to 459 chararcters are supported,
         /// and messages longer than 160 characters will be split into multiple messages, which
@@ -60,18 +60,59 @@ namespace LibSmsGateway
         public async Task<SmsResult> Send(string message, string recipient, string sender = "",
             string group = "", bool receipt = false, bool flash = false)
         {
+            return await Send(message, new string[]{recipient}, sender,
+                new string[]{group}, receipt, flash);
+        }
+
+        /// <summary>
+        /// Sends an SMS message to a group of recipients or recipient groups.
+        /// </summary>
+        /// <param name="message">The message to be sent. Up to 459 chararcters are supported,
+        /// and messages longer than 160 characters will be split into multiple messages, which
+        /// will be charged separately.</param>
+        /// <param name="recipients">A list of recipient phone numbers in E.164 format, e.g. "436641111111".
+        /// Can be <c>null</c> if a valid list of <paramref name="groups"/> is provided instead.</param>
+        /// <param name="groups">A list of valid user groups created in the user account panel.
+        /// Can be <c>null</c> if a valid list of <paramref name="recipients"/> is provided.</param>
+        /// <param name="sender">The sender name for the SMS message. Please note that 
+        /// setting a sender name may cause extra charges. The sender name may consist of up to
+        /// 10 characters, but may not include spaces or other special characters.</param>
+        /// <param name="receipt">Set to <c>true</c> to get an acknowledgement of receipt.
+        /// This will cause additional charges.</param>
+        /// <param name="flash">Set to <c>true</c> to send a "flash message", which will be
+        /// displayed directly on the recipient's start screen and cannot be saved.</param>
+        /// <returns>Returns an <see cref="SmsResult"/> object representing the result of the 
+        /// SMS send operation.</returns>
+        public async Task<SmsResult> Send(string message, string[] recipients, string sender = "",
+            string[] groups = null, bool receipt = false, bool flash = false)
+        {
             if (message == null)
                 throw new ArgumentException("Invalid message!", nameof(message));
 
-            if (string.IsNullOrEmpty(recipient) && string.IsNullOrEmpty(group))
-                throw new ArgumentException("Both recipient and recipient group are invalid!");
+            if ((recipients == null || recipients.Length < 1) && 
+                (groups == null || groups.Length < 1))
+                throw new ArgumentException("Either recipient or recipient group must be valid!");
 
             NameValueCollection queryParams = new NameValueCollection();
             queryParams.Add("username", _username);
             queryParams.Add("validpass", _password);
             queryParams.Add("message", message);
-            if (!string.IsNullOrWhiteSpace(recipient)) queryParams.Add("number[]", recipient);
-            if (!string.IsNullOrWhiteSpace(group)) queryParams.Add("group[]", group);
+            if (recipients != null)
+            {
+                foreach (var recipient in recipients)
+                {
+                    if (!string.IsNullOrWhiteSpace(recipient))
+                        queryParams.Add("number[]", recipient);
+                }
+            }
+            if (groups != null)
+            {
+                foreach (var group in groups)
+                {
+                    if (!string.IsNullOrWhiteSpace(group))
+                        if (!string.IsNullOrWhiteSpace(group)) queryParams.Add("group[]", group);
+                }
+            }
             if (!string.IsNullOrWhiteSpace(sender)) queryParams.Add("absender", SanitizeSender(sender));
             queryParams.Add("receipt", receipt ? "1" : "0");
             queryParams.Add("flash", flash ? "1" : "0");
