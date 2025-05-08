@@ -67,7 +67,7 @@ namespace LibSmsGateway
             if (errormessage == null)
                 errormessage = "";
 
-            if (result == "OK:") return new SmsResult(StatusCode.Success, errormessage, content);
+            if (result == "OK" || result == "OK:") return new SmsResult(StatusCode.Success, errormessage, content);
             if (result == "ERROR:")
             {
                 var errorcodeStr = xml?.Element("errorcode")?.Value?.Trim();
