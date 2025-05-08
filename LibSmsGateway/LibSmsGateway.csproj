@@ -10,8 +10,9 @@
     <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
     <PackageTags>LibSMSGateway;SMSLib;LibSMS;SMS library;texting;text;text message;messaging;sms-gateway;sms-gateway.at; sms gateway;send sms;send text</PackageTags>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <PackageReleaseNotes>Enable multiple recipients/recipient groups.</PackageReleaseNotes>
+    <Title>LibSmsGateway</Title>
   </PropertyGroup>
 
 </Project>
