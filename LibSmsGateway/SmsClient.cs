@@ -15,15 +15,34 @@ namespace LibSmsGateway
     public class SmsClient
     {
         private const string _apiUrl = @"https://www.sms-gateway.at/sms/sendsms.php";
+        private string _apiKey;
         private string _username;
         private string _password;
         private HttpClient _client;
 
         /// <summary>
-        /// Creates a new <see cref="SmsClient"/> instance.
+        /// Creates a new <see cref="SmsClient"/> instance that authenticates by API key.
+        /// </summary>
+        /// <param name="apiKey">The API key generated within your sms-gateway.at account
+        /// (customer area, "Schnittstellen"). It starts with "sk_live_".</param>
+        public SmsClient(string apiKey)
+        {
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("Invalid API key specified!", nameof(apiKey));
+
+            _apiKey = apiKey;
+
+            _client = new HttpClient();
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="SmsClient"/> instance that authenticates by username and
+        /// password. This authentication method is deprecated by sms-gateway.at, please use
+        /// <see cref="SmsClient(string)"/> with an API key instead.
         /// </summary>
         /// <param name="username">The username of your sms-gateway.at account.</param>
         /// <param name="password">The HTTP2SMS API password generated within your sms-gateway.at account.</param>
+        [Obsolete("Username/password authentication is deprecated by sms-gateway.at. Use SmsClient(string apiKey) instead.")]
         public SmsClient(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
@@ -96,8 +115,11 @@ namespace LibSmsGateway
                 throw new ArgumentException("Either recipient or recipient group must be valid!");
 
             NameValueCollection queryParams = new NameValueCollection();
-            queryParams.Add("username", _username);
-            queryParams.Add("validpass", _password);
+            if (_apiKey == null)
+            {
+                queryParams.Add("username", _username);
+                queryParams.Add("validpass", _password);
+            }
             queryParams.Add("message", message);
             if (recipients != null)
             {
@@ -123,7 +145,10 @@ namespace LibSmsGateway
             try
             {
                 var fullQueryUrl = _apiUrl + ToQueryString(queryParams);
-                var httpResponse = await _client.GetAsync(fullQueryUrl);
+                var request = new HttpRequestMessage(HttpMethod.Get, fullQueryUrl);
+                // Send the API key as a header to keep it out of the request URL
+                if (_apiKey != null) request.Headers.Add("X-Api-Key", _apiKey);
+                var httpResponse = await _client.SendAsync(request);
 
                 return SmsResult.FromHttpResponse(httpResponse);
             }

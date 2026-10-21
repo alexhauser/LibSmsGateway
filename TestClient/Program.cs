@@ -8,15 +8,25 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
-            // Get username and password from secret app settings
+            // Get API key (or legacy username and password) from secret app settings
             var config = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsecrets.json", false, true)
                 .Build();
 
             // Create an SMS client
-            var smsClient = new SmsClient(
-                config["user"], config["password"]);
+            SmsClient smsClient;
+            if (!string.IsNullOrEmpty(config["apikey"]))
+            {
+                smsClient = new SmsClient(config["apikey"]);
+            }
+            else
+            {
+#pragma warning disable CS0618 // Username/password authentication is deprecated
+                smsClient = new SmsClient(
+                    config["user"], config["password"]);
+#pragma warning restore CS0618
+            }
 
             // Send a message
             var result = smsClient.Send(

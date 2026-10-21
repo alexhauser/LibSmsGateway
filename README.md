@@ -6,6 +6,8 @@ A .NET Core library for sending SMS messages via the www.sms-gateway.at `HTTP2SM
 ### 1. Create and configure account
 Please note that you will need an account at www.sms-gateway.at in order to make use of this library.
 
+Create an API key in the customer area under _Schnittstellen_. The key starts with `sk_live_` and is only shown once, so store it safely.
+
 ### 2. Install NuGet package
 
 Open the project/solution in Visual Studio, and open the console using the Tools > NuGet Package Manager > Package Manager Console command. 
@@ -23,8 +25,8 @@ Install-Package LibSmsGateway -ProjectName MyProject
 using LibSmsGateway;
 
 // Create an SMS client.
-// Get username and password from your sms-gateway.at account.
-var smsClient = new SmsClient("user", "password");
+// Get the API key from your sms-gateway.at account.
+var smsClient = new SmsClient("sk_live_...");
 
 // Send a message
 var result = await smsClient.Send(
@@ -50,6 +52,8 @@ else
     result.RawResponse);
 }
 ```
+
+> **Note:** The `SmsClient(username, password)` constructor still works but is deprecated, because sms-gateway.at is phasing out username/password authentication. Please switch to an API key.
 ## License
 
 This project is published under the MIT license.
