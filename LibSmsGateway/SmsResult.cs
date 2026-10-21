@@ -48,10 +48,12 @@ namespace LibSmsGateway
         /// <param name="httpResponse">The <see cref="HttpResponseMessage"/> object to parse.</param>
         public static SmsResult FromHttpResponse(HttpResponseMessage httpResponse)
         {
+            if (httpResponse == null)
+                return new SmsResult(StatusCode.UnknownError, "unknown error", "");
+
             string content = httpResponse.Content.ReadAsStringAsync().Result;
 
-            if ( httpResponse == null ||
-                 httpResponse.IsSuccessStatusCode == false || 
+            if ( httpResponse.IsSuccessStatusCode == false ||
                  string.IsNullOrWhiteSpace(content))
             {
                 goto ReturnUnknownError;
@@ -68,7 +70,7 @@ namespace LibSmsGateway
                 errormessage = "";
 
             if (result == "OK" || result == "OK:") return new SmsResult(StatusCode.Success, errormessage, content);
-            if (result == "ERROR:")
+            if (result == "ERROR" || result == "ERROR:")
             {
                 var errorcodeStr = xml?.Element("errorcode")?.Value?.Trim();
                 if (errorcodeStr == null) errorcodeStr = "999";
