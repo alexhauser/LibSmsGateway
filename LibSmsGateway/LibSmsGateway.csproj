@@ -10,8 +10,8 @@
     <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
     <PackageTags>LibSMSGateway;SMSLib;LibSMS;SMS library;texting;text;text message;messaging;sms-gateway;sms-gateway.at; sms gateway;send sms;send text</PackageTags>
-    <Version>1.2.0</Version>
-    <PackageReleaseNotes>Add authentication by API key; username/password authentication is now deprecated. Fix API errors being reported as UnknownError. Add new status codes. Allow sender IDs of up to 11 characters or 15 digits.</PackageReleaseNotes>
+    <Version>1.2.1</Version>
+    <PackageReleaseNotes>Include README in the package.</PackageReleaseNotes>
     <Title>LibSmsGateway</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
