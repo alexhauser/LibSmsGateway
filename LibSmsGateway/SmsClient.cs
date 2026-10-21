@@ -50,7 +50,8 @@ namespace LibSmsGateway
         /// Can be <c>null</c> if a valid <paramref name="recipient"/> is provided.</param>
         /// <param name="sender">The sender name for the SMS message. Please note that 
         /// setting a sender name may cause extra charges. The sender name may consist of up to
-        /// 10 characters, but may not include spaces or other special characters.</param>
+        /// 11 letters and digits, or up to 15 digits, but may not include spaces or other
+        /// special characters.</param>
         /// <param name="receipt">Set to <c>true</c> to get an acknowledgement of receipt.
         /// This will cause additional charges.</param>
         /// <param name="flash">Set to <c>true</c> to send a "flash message", which will be
@@ -76,7 +77,8 @@ namespace LibSmsGateway
         /// Can be <c>null</c> if a valid list of <paramref name="recipients"/> is provided.</param>
         /// <param name="sender">The sender name for the SMS message. Please note that 
         /// setting a sender name may cause extra charges. The sender name may consist of up to
-        /// 10 characters, but may not include spaces or other special characters.</param>
+        /// 11 letters and digits, or up to 15 digits, but may not include spaces or other
+        /// special characters.</param>
         /// <param name="receipt">Set to <c>true</c> to get an acknowledgement of receipt.
         /// This will cause additional charges.</param>
         /// <param name="flash">Set to <c>true</c> to send a "flash message", which will be
@@ -149,8 +151,9 @@ namespace LibSmsGateway
         }
 
         /// <summary>
-        /// Strips a list of invalid characters from the given <paramref name="sender"/> string 
-        /// and truncates it to a length of 10 characters max.
+        /// Strips a list of invalid characters from the given <paramref name="sender"/> string
+        /// and truncates it to a length of 15 characters max for numeric senders, or 11
+        /// characters max otherwise.
         /// </summary>
         /// <param name="sender">The sender name to sanitize.</param>
         private string SanitizeSender(string sender)
@@ -164,8 +167,9 @@ namespace LibSmsGateway
                 .Replace("\n", "")
                 .Replace(":", "");
 
-            if (sender.Length > 10)
-                sender = sender.Substring(0, 10);
+            int maxLength = sender.All(char.IsDigit) ? 15 : 11;
+            if (sender.Length > maxLength)
+                sender = sender.Substring(0, maxLength);
 
             return sender;
         }
