@@ -13,6 +13,11 @@
     <Version>1.2.0</Version>
     <PackageReleaseNotes>Add authentication by API key; username/password authentication is now deprecated. Fix API errors being reported as UnknownError. Add new status codes. Allow sender IDs of up to 11 characters or 15 digits.</PackageReleaseNotes>
     <Title>LibSmsGateway</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
