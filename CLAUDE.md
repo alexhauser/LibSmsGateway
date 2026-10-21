@@ -15,7 +15,7 @@ dotnet build LibSmsGateway/LibSmsGateway.sln     # builds library + TestClient; 
 dotnet run --project TestClient                  # manual smoke test - sends a real SMS
 ```
 
-There is no unit test project and no linter. `TestClient` is a console app for manual testing: it reads `apikey` (or legacy `user` and `password`) from `TestClient/appsecrets.json` (required, gitignored, copied to output), and running it hits the live API and may incur charges.
+There is no unit test project and no linter. `TestClient` is a console app for manual testing: it reads `apikey` (or legacy `user` and `password`) from `TestClient/appsecrets.json` (required, gitignored, copied to output; create it from `TestClient/appsecrets.example.json` - `apikey` wins if set, otherwise `user`/`password` are used), and running it hits the live API and may incur charges.
 
 ## Architecture
 
