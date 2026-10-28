@@ -1,5 +1,5 @@
 # LibSmsGateway
-A .NET Core library for sending SMS messages via the www.sms-gateway.at `HTTP2SMS` API.
+A .NET library for sending SMS messages via the www.sms-gateway.at `HTTP2SMS` API. Supports .NET Core 3.1+ and .NET Framework 4.8.
 
 ## Usage
 

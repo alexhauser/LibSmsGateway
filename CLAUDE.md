@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-LibSmsGateway is a small .NET library (published to NuGet as `LibSmsGateway`) for sending SMS via the www.sms-gateway.at `HTTP2SMS` API. Both projects target `netcoreapp3.1`.
+LibSmsGateway is a small .NET library (published to NuGet as `LibSmsGateway`) for sending SMS via the www.sms-gateway.at `HTTP2SMS` API. Both projects multi-target `netcoreapp3.1` and `net48` (net48 builds use the `Microsoft.NETFramework.ReferenceAssemblies` package, so no targeting pack install is needed; keep library code within C# 7.3, the net48 default).
 
 ## Commands
 
@@ -12,7 +12,7 @@ The solution file lives inside the library folder, not at the repo root:
 
 ```sh
 dotnet build LibSmsGateway/LibSmsGateway.sln     # builds library + TestClient; also produces the .nupkg (GeneratePackageOnBuild)
-dotnet run --project TestClient                  # manual smoke test - sends a real SMS
+dotnet run --project TestClient -f net48         # manual smoke test - sends a real SMS (or -f netcoreapp3.1)
 ```
 
 There is no unit test project and no linter. `TestClient` is a console app for manual testing: it reads `apikey` (or legacy `user` and `password`) from `TestClient/appsecrets.json` (required, gitignored, copied to output; create it from `TestClient/appsecrets.example.json` - `apikey` wins if set, otherwise `user`/`password` are used), and running it hits the live API and may incur charges.
