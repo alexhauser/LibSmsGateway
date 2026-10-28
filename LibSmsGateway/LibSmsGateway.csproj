@@ -10,8 +10,8 @@
     <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
     <PackageTags>LibSMSGateway;SMSLib;LibSMS;SMS library;texting;text;text message;messaging;sms-gateway;sms-gateway.at; sms gateway;send sms;send text</PackageTags>
-    <Version>1.2.1</Version>
-    <PackageReleaseNotes>Include README in the package.</PackageReleaseNotes>
+    <Version>1.3.0</Version>
+    <PackageReleaseNotes>Add .NET Framework 4.8 target.</PackageReleaseNotes>
     <Title>LibSmsGateway</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
