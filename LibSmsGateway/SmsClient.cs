@@ -81,7 +81,7 @@ namespace LibSmsGateway
             string group = "", bool receipt = false, bool flash = false)
         {
             return await Send(message, new string[]{recipient}, sender,
-                new string[]{group}, receipt, flash);
+                new string[]{group}, receipt, flash).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -148,7 +148,9 @@ namespace LibSmsGateway
                 var request = new HttpRequestMessage(HttpMethod.Get, fullQueryUrl);
                 // Send the API key as a header to keep it out of the request URL
                 if (_apiKey != null) request.Headers.Add("X-Api-Key", _apiKey);
-                var httpResponse = await _client.SendAsync(request);
+                // Don't capture the caller's SynchronizationContext, so callers that block
+                // on Send(...).Result (e.g. WinForms or classic ASP.NET) won't deadlock
+                var httpResponse = await _client.SendAsync(request).ConfigureAwait(false);
 
                 return SmsResult.FromHttpResponse(httpResponse);
             }
