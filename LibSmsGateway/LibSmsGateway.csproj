@@ -14,6 +14,8 @@
     <PackageReleaseNotes>Add .NET Framework 4.8 target.</PackageReleaseNotes>
     <Title>LibSmsGateway</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>LibSmsGateway.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

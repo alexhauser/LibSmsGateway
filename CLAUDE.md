@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-LibSmsGateway is a small .NET library (published to NuGet as `LibSmsGateway`) for sending SMS via the www.sms-gateway.at `HTTP2SMS` API. Both projects multi-target `netcoreapp3.1` and `net48` (net48 builds use the `Microsoft.NETFramework.ReferenceAssemblies` package, so no targeting pack install is needed; keep library code within C# 7.3, the net48 default).
+LibSmsGateway is a small .NET library (published to NuGet as `LibSmsGateway`) for sending SMS via the www.sms-gateway.at `HTTP2SMS` API. Both projects multi-target `netcoreapp3.1` and `net48` (net48 builds use the `Microsoft.NETFramework.ReferenceAssemblies` package, so no targeting pack install is needed; keep library code within C# 7.3, the net48 default). The library is strong-named with the committed key `LibSmsGateway/LibSmsGateway.snk` (committed deliberately, per Microsoft's open-source guidance); never regenerate or replace it, since that changes the assembly identity and breaks binary compatibility for consumers.
 
 ## Commands
 
