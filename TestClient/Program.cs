@@ -52,6 +52,33 @@ namespace TestClient
                 result.StatusMessage,
                 result.RawResponse);
             }
+
+            // Query the history of sent messages (requires API key authentication)
+            if (!string.IsNullOrEmpty(config["apikey"]))
+            {
+                var history = smsClient.GetHistory(new SmsHistoryQuery
+                {
+                    From = DateTime.Today.AddDays(-7),  // start of period, optional
+                    PageSize = 20,                      // messages per page, optional
+                    IncludeRecipients = true            // include recipient status, optional
+                }).Result;
+
+                if (history.IsSuccess)
+                {
+                    foreach (var sms in history.Messages)
+                    {
+                        Console.WriteLine("{0} {1:g} {2}: {3}",
+                            sms.Id, sms.Time, sms.Status, sms.Text);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(
+                    "SatusCode: {0}, StatusMessage: \"{1}\"",
+                    history.StatusCode.ToString(),
+                    history.StatusMessage);
+                }
+            }
         }
     }
 }

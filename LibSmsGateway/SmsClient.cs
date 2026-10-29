@@ -4,17 +4,19 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Web;
 using System.Collections.Specialized;
+using System.Globalization;
 
 namespace LibSmsGateway
 {
     /// <summary>
     /// A client for sending SMS messages over the <see href="www.sms-gateway.at">
-    /// sms-gateway.at</see> HTTP2SMS API. Please register and configure an account 
-    /// before using this.
+    /// sms-gateway.at</see> HTTP2SMS API, and for querying the history of sent messages.
+    /// Please register and configure an account before using this.
     /// </summary>
     public class SmsClient
     {
         private const string _apiUrl = @"https://www.sms-gateway.at/sms/sendsms.php";
+        private const string _historyApiUrl = @"https://portal.sms-gateway.at/schnittstelle/ausgang.php";
         private string _apiKey;
         private string _username;
         private string _password;
@@ -161,6 +163,61 @@ namespace LibSmsGateway
         }
 
         /// <summary>
+        /// Retrieves the history of sent SMS messages ("SMS-Ausgang") with their delivery status.
+        /// Requires API key authentication (<see cref="SmsClient(string)"/>). Please note that the
+        /// API allows at most 120 queries per account in 10 minutes; use
+        /// <see cref="SmsHistoryQuery.AfterId"/> to poll for new messages only.
+        /// </summary>
+        /// <param name="query">Optional filters for the query. Pass <c>null</c> to retrieve
+        /// the first page of the last 7 days.</param>
+        /// <returns>Returns an <see cref="SmsHistoryResult"/> object containing the sent
+        /// messages and the result of the query operation.</returns>
+        /// <exception cref="InvalidOperationException">The client uses the deprecated
+        /// username/password authentication, which the history API does not support.</exception>
+        public async Task<SmsHistoryResult> GetHistory(SmsHistoryQuery query = null)
+        {
+            if (_apiKey == null)
+                throw new InvalidOperationException(
+                    "The SMS history API requires API key authentication. Use SmsClient(string apiKey) instead.");
+
+            NameValueCollection queryParams = new NameValueCollection();
+            if (query != null)
+            {
+                if (query.From.HasValue) queryParams.Add("von", FormatHistoryTime(query.From.Value));
+                if (query.To.HasValue) queryParams.Add("bis", FormatHistoryTime(query.To.Value));
+                if (query.Page.HasValue) queryParams.Add("seite", query.Page.Value.ToString(CultureInfo.InvariantCulture));
+                if (query.PageSize.HasValue) queryParams.Add("je_seite", query.PageSize.Value.ToString(CultureInfo.InvariantCulture));
+                var status = query.Status.HasValue ? SmsDeliveryStatusConverter.ToApiString(query.Status.Value) : null;
+                if (status != null) queryParams.Add("status", status);
+                if (query.IncludeRecipients) queryParams.Add("mit_empfaengern", "1");
+                if (query.AfterId.HasValue) queryParams.Add("nach_id", query.AfterId.Value.ToString(CultureInfo.InvariantCulture));
+                if (!string.IsNullOrWhiteSpace(query.Account)) queryParams.Add("konto", query.Account);
+            }
+
+            try
+            {
+                var fullQueryUrl = _historyApiUrl + ToQueryString(queryParams);
+                var request = new HttpRequestMessage(HttpMethod.Get, fullQueryUrl);
+                request.Headers.Add("X-API-Key", _apiKey);
+                var httpResponse = await _client.SendAsync(request).ConfigureAwait(false);
+
+                return SmsHistoryResult.FromHttpResponse(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                return new SmsHistoryResult(StatusCode.UnknownError, ex.Message, "");
+            }
+        }
+
+        /// <summary>
+        /// Formats a date/time as expected by the SMS history API's "von"/"bis" parameters.
+        /// </summary>
+        private string FormatHistoryTime(DateTime time)
+        {
+            return time.ToString("yyyy'-'MM'-'dd'T'HH':'mm", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
         /// Helper function to turn a <see cref="NameValueCollection"/> into a query string.
         /// </summary>
         /// <param name="queryParams">The <see cref="NameValueCollection"/> containing the query parameters.</param>
@@ -174,7 +231,7 @@ namespace LibSmsGateway
                     HttpUtility.UrlEncode(key),
                     HttpUtility.UrlEncode(value))
                 ).ToArray();
-            return "?" + string.Join("&", array);
+            return array.Length > 0 ? "?" + string.Join("&", array) : "";
         }
 
         /// <summary>

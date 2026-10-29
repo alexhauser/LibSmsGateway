@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace LibSmsGateway
 {
     /// <summary>
-    /// Provides error/success status information for an SMS send operation.
+    /// Provides error/success status information for an sms-gateway.at API operation.
     /// </summary>
     public class SmsResult
     {

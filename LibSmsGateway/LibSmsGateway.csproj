@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>Alexander Hauser</Authors>
-    <Description>A .NET library for sending SMS messages via the www.sms-gateway.at HTTP2SMS API.</Description>
+    <Description>A .NET library for sending SMS messages via the www.sms-gateway.at HTTP2SMS API, and for querying the history of sent messages.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
@@ -29,6 +29,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
 
 </Project>

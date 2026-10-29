@@ -45,6 +45,8 @@ namespace LibSmsGateway
         LinkBlocked = 131,
         /// <summary>Unsupported destination address.</summary>
         UnsupportedDestinationAddress = 200,
+        /// <summary>Invalid request parameters, e.g. a history query period longer than 93 days.</summary>
+        InvalidRequest = 400,
         /// <summary>Too many failed logins; wait 5 minutes before retrying.</summary>
         TooManyFailedLogins = 429,
         /// <summary>Internal server error; retry later.</summary>

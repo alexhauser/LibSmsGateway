@@ -53,6 +53,30 @@ else
 }
 ```
 
+### 4. Query sent messages
+
+The history of sent messages ("SMS-Ausgang") including delivery status can be queried as well. This requires an API key; it is not available with username/password authentication.
+
+```C#
+var history = await smsClient.GetHistory(new SmsHistoryQuery
+{
+    From = DateTime.Today.AddDays(-7),  // start of period, optional
+    PageSize = 20,                      // messages per page, optional
+    IncludeRecipients = true            // include recipient status, optional
+});
+
+if (history.IsSuccess)
+{
+    foreach (var sms in history.Messages)
+    {
+        Console.WriteLine("{0} {1:g} {2}: {3}",
+            sms.Id, sms.Time, sms.Status, sms.Text);
+    }
+}
+```
+
+Further filters are `To`, `Page`, `Status` and `AfterId` (only messages newer than a given ID, handy for polling). If `history.HasMore` is `true`, request the next `Page`. Please note that the API allows at most 120 queries per account in 10 minutes.
+
 > **Note:** The `SmsClient(username, password)` constructor still works but is deprecated, because sms-gateway.at is phasing out username/password authentication. Please switch to an API key.
 ## License
 
