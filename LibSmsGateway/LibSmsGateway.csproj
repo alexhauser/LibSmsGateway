@@ -10,8 +10,8 @@
     <PackageProjectUrl>https://github.com/alexhauser/LibSmsGateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/alexhauser/LibSmsGateway</RepositoryUrl>
     <PackageTags>LibSMSGateway;SMSLib;LibSMS;SMS library;texting;text;text message;messaging;sms-gateway;sms-gateway.at; sms gateway;send sms;send text</PackageTags>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>Strong-name the assembly. This changes the assembly identity, so .NET Framework consumers must recompile against this version.</PackageReleaseNotes>
+    <Version>2.1.0</Version>
+    <PackageReleaseNotes>Add SmsClient.GetHistory to query sent messages and their delivery status (SMS-Ausgang). Requires API key authentication.</PackageReleaseNotes>
     <Title>LibSmsGateway</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <SignAssembly>true</SignAssembly>
